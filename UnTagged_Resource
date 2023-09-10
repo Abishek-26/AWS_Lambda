@@ -1,1 +1,18 @@
+import json
+import boto3
 
+def lambda_handler(event, context):
+    sns_topic_arn = 'ENTER YOUR SNS ARN HERE'
+    config_event = json.loads(event['invokingEvent'])
+    compliance_resource_type = config_event['configurationItem']['resourceType']
+    resource_id = config_event['configurationItem']['resourceId']
+    
+    if 'tags' not in config_event['configurationItem']:
+        sns = boto3.client('sns')
+        message = f"Resource without tags detected!\nResource Type: {compliance_resource_type}\nResource ID: {resource_id}"
+        sns.publish(TopicArn=sns_topic_arn, Subject='Untagged Resource Detected', Message=message)
+        
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Notification sent successfully!')
+    }
