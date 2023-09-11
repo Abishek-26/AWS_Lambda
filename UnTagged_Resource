@@ -16,3 +16,8 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps('Notification sent successfully!')
     }
+
+
+
+
+edit the code to your requirement
